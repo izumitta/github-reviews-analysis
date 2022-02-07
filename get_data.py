@@ -84,7 +84,11 @@ def get_data(owner, repository_name):
     reviews = []
     comments = []
 
-    for pull_request in repository.get_pulls(sort="created", base="master"):
+    for index, pull_request in enumerate(
+        repository.get_pulls(
+            state="closed", sort="created", direction="desc", base="master"
+        )[:400]
+    ):
         review_requests = pull_request.get_review_requests()
         pull_requests.append(serialize_pull_request(pull_request, review_requests[0]))
 
@@ -92,8 +96,10 @@ def get_data(owner, repository_name):
             reviews.append(serialize_review(pull_request.id, review))
 
             for comment in pull_request.get_single_review_comments(review.id):
-                comments.append(serialize_comment(review.id, comment))
-
+                serialized_comment = serialize_comment(review.id, comment)
+                if serialized_comment is not None:
+                    comments.append(serialized_comment)
+        print(f"Pull request {index} is appended")
     return (pull_requests, reviews, comments)
 
 
