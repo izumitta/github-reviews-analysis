@@ -43,7 +43,7 @@ def serialize_review(pull_request_id, review):
         "rw_user": review.user.login,
         "submitted_at": review.submitted_at.isoformat(),
         "rw_state": review.state,
-        "rw_body": review.body,
+        "rw_body": review.body or None,
     }
 
 

@@ -19,12 +19,12 @@ class Comment:
 
 
 class Review:
-    def __init__(self):
+    def __init__(self, body=""):
         self.id = 234
         self.user = User()
         self.submitted_at = datetime(2022, 12, 12)
         self.state = "APPROVED"
-        self.body = "asdfgh"
+        self.body = body
 
 
 class PullRequestPart:
@@ -61,17 +61,30 @@ class TestSerializeComment:
         assert_equal(actual, expected)
 
 
-def test_serialize_review():
-    expected = {
-        "pr_id": 164,
-        "rw_id": 234,
-        "rw_user": "peepoo",
-        "submitted_at": "2022-12-12T00:00:00",
-        "rw_state": "APPROVED",
-        "rw_body": "asdfgh",
-    }
-    actual = serialize_review(164, Review())
-    assert_dict_equal(actual, expected)
+class TestSerializeReview:
+    def test_review_with_body(self):
+        expected = {
+            "pr_id": 164,
+            "rw_id": 234,
+            "rw_user": "peepoo",
+            "submitted_at": "2022-12-12T00:00:00",
+            "rw_state": "APPROVED",
+            "rw_body": "asdfgh",
+        }
+        actual = serialize_review(164, Review(body="asdfgh"))
+        assert_dict_equal(actual, expected)
+
+    def test_review_no_body(self):
+        expected = {
+            "pr_id": 164,
+            "rw_id": 234,
+            "rw_user": "peepoo",
+            "submitted_at": "2022-12-12T00:00:00",
+            "rw_state": "APPROVED",
+            "rw_body": None,
+        }
+        actual = serialize_review(164, Review())
+        assert_dict_equal(actual, expected)
 
 
 class TestSerializePullRequest:
