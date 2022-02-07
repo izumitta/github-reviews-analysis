@@ -1,5 +1,7 @@
 # GitHub Reviews analysis
 
+**Work in progress** 
+
 ## Setup
 
 1. Create virtual environment
